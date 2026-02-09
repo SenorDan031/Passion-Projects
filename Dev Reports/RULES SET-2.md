@@ -38,6 +38,8 @@ Author: [NAME](https://github.com/username)
 
 (E O L)
 
+```
+
 ## Multiple Developer Entry Format
 
    Author: [NAME](https://github.com/username)
