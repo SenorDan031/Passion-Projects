@@ -25,5 +25,7 @@ Author: [Yazdan](https://github.com/SenorDan031)
   - C++ designated as the core engine and source of truth.
   - Python planned as the UX and analytics layer.
 - Formalized developer reporting standards and documentation guidelines.
+- Added [Krish Agarwal](https://github.com/1828348dhfjfjd), to maintain the **PYTHON** model of **VALONOMICS**.
+- [Krish](https://github.com/1828348dhfjfjd) will be lead developer on **PYTHON** model.
 
 ---
