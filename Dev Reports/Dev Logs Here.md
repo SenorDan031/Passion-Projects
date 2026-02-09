@@ -4,7 +4,7 @@ Date: February 9, 2026
 Author: [Yazdan](https://github.com/SenorDan031)  
 ---
 
-## Work done
+## Work done 
 
 - Created GitHub repository for VALONOMICS and pushed the initial C++ prototype.
 - Established core project directories:
