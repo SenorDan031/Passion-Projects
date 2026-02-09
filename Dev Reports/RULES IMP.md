@@ -82,7 +82,7 @@ List of planned tasks or future improvements.
 
 Devlog 01  
 Date: February 9, 2026  
-Developer: Yazdan  
+Developer: abc_person 
 
 ---
 
