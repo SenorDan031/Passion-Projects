@@ -42,6 +42,8 @@ Author: [NAME](https://github.com/username)
 
 ## Multiple Developer Entry Format
 
+```
+
    Author: [NAME](https://github.com/username)
 
      ## Work Completed
