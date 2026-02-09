@@ -18,7 +18,7 @@
 - All flowcharts and architectural diagrams must be uploaded exclusively to the designated folders.
 - Content must follow the predefined structure:
 
-  - Meeting videos must be documented inside `videoLinks.md`, including:
+  - Meeting videos must be documented inside `DiscussionLinks.md`, including:
     - Date  
     - Topic of discussion  
     - Host name  
