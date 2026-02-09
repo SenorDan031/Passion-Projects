@@ -33,15 +33,6 @@ Python reflects approved and validated features.
 
 ---
 
-## Planned Premium Features
-
-- Agent-specific guides
-- Map guides
-- Aim trainer
-- Monthly performance reports
-
----
-
 ## Future Direction
 
 - Expanded analytics
