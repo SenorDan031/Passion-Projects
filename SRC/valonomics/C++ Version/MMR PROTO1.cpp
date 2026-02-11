@@ -56,7 +56,7 @@
     #include <windows.h>
     #include <cmath>
     #include <vector>
-    #include "colors.h"
+    #include "Utils_files_/colors.h"
 
     using namespace std;
 
@@ -86,82 +86,74 @@
             }
     };
 
-    class ACS_CALCI : public regdata{      //This class here will calculate the ACS of the player 
-                                        //Based on ACS, Player's Rank and Tier will be decided and required suggestions be given
-            private:   
+    class ACS_CALCI : public regdata {
+            protected:
+                string pass_key = "valo26ACS";
 
-            string pass_key="valo26ACS";       
-        
-            float ACS(){
-                float acs=0; int fb=170;
-                for(int i=match_data[5];i>0;i--){
+                // Changed to public so child classes and main can trigger it
+                float calculate_ACS() {
+                    float acs = 0;
+                    int fb = 170;
 
-                    if(i>0){
-                        if(fb>=0){
-                            acs+= (float) fb;  //F.B. bonus starts from 170 and decreases by 20 for each First Kills
-                        }
+                    // Ensure we don't crash if match_data isn't filled yet
+                    if (match_data.size() < 6) return 0;
+
+                    for (int i = match_data[5]; i > 0; i--) {
+                        if (fb >= 0) acs += (float)fb;
+                        fb -= 20;
+                        if (fb < 0) fb = 0;
                     }
-                    fb-=20;
-                    if(fb<0) fb=0; //Ensures that F.B. bonus >  0
-            }
-            acs+= (float) (match_data[0]-match_data[5])*125;  //For each kills fter first bloods +120/Kill(s)
-            acs+= (float) match_data[2]*30; //For each assists get +30
-            acs+= (float) (match_data[3]*10.5)- (float)(match_data[4]*5);  
-            //For each round won get +10.5 and for each loss get -5
 
-            //Total Acs is divided by total round played to get average combat score
-            if(match_data[3]+match_data[4]>0) acs/= (float) (match_data[3]+match_data[4]);
-            
-            else acs=0;
+                    acs += (float)(match_data[0] - match_data[5]) * 125;
+                    acs += (float)match_data[2] * 30;
+                    acs += (float)(match_data[3] * 10.5) - (float)(match_data[4] * 5);
 
-            return acs;}
+                    int total_rounds = match_data[3] + match_data[4];
+                    return (total_rounds > 0) ? (acs / (float)total_rounds) : 0;
+                }
+                float impValue=calculate_ACS();
 
-            public :
+            public:
+                // This helper makes sure Rank and Tier always use FRESH data
+                string getRank() { return Rank(impValue); }
+                string getTier() { return Tier(impValue); }
 
-            float scores=ACS();
-
-            string Rank(float scores){ 
-                //This Function decides player's rank based on thier overall ACS
-
-                if(scores<600 && scores>=450){
-                    return "Radiant";
-                }else if(scores<450 && scores>=300){
-                    return "Immortal - Ascendant";
-                }else if(scores<300 && scores>=250){
-                    return "Diamond - Platinum";
-                }else if(scores<250 && scores>=195){
-                    return "Gold - Silver";
-                }else  return "Bronze and Below";}
-
-                string Tier(float scores){ 
+                string Rank(float s) {
+                    if (s >= 450) return "Radiant";
+                    if (s >= 300) return "Immortal - Ascendant";
+                    if (s >= 250) return "Diamond - Platinum";
+                    if (s >= 195) return "Gold - Silver";
+                    return "Bronze and Below";
+                }
+                string Tier(float scr){ 
                     //This Function decides player's tier based on the Doubling of thier overall ACS value
                     
-                    if(scores*2>=1000 && scores*2<=2000){
+                    if(scr*2>=1000 && scr*2<=2000){
                         cout<<YELLOW<<"\n\t>>> You are in Top 1% Players tier, globally! Keep clipping those taps! <<<"<<RESET<<endl;
                         
                         return "Tier:> SSS";
-                    }else if(scores*2>=800 && scores*2<1000){
+                    }else if(scr*2>=800 && scr*2<1000){
 
                         cout<<YELLOW<<"\n\t>>> You are in TOP 5% PLayers tier, globally! Keep climbing up the ladder, Your are ALMOST THERE! <<<"<<RESET<<endl;
 
                         return "Tier:> SS";
-                    }else if(scores*2>=650 && scores*2<800){
+                    }else if(scr*2>=650 && scr*2<800){
                         cout<<GREEN<<"\n\t>>> You are in TOP 10% Players tier, globally! Good going, Keep on FIGHTING YOUR WAY UP!! <<<"<<RESET<<endl;
 
                         return "Tier:> S";
-                    }else if(scores*2>=500 && scores*2<650){
+                    }else if(scr*2>=500 && scr*2<650){
                         cout<<GREEN<<"\n\t>>> You are in TOP 25% Players tier, globally! Not bad, but you can do BETTER! <<<"<<RESET<<endl;
 
                         return "Tier:> A";
-                    }else if(scores*2>=400 && scores*2<500){
+                    }else if(scr*2>=400 && scr*2<500){
                         cout<<BLUE<<"\n\t>>> You are in TOP 50% Players tier, globally! You need to step up your game! <<<"<<RESET<<endl;
 
                         return "Tier:> B";
-                    }else if(scores*2>=300 && scores*2<400){
+                    }else if(scr*2>=300 && scr*2<400){
                         cout<<BLUE<<"\n\t>>> You are in TOP 75% Players tier, globally! You need to practice more! <<<"<<RESET<<endl;
 
                         return "Tier:> C";
-                    }else if(scores*2>=200 && scores*2<300){
+                    }else if(scr*2>=200 && scr*2<300){
                         cout<<RED<<"\n\t>>> You are in BOTTOM 25% Players tier, globally! Work hard to improve your skills! <<<"<<RESET<<endl;
 
                         return "Tier:> D";
@@ -177,13 +169,13 @@
 
                     cout<<BG_BLUE<<"\n\t\t>>> Player's Combat Card <<<"<<RESET<<endl;
 
-                    cout<<MAGENTA<<"\n\t Average Combat Score (ACS) : "<<YELLOW<<scores<<RESET<<endl; 
+                    cout<<MAGENTA<<"\n\t Average Combat Score (ACS) : "<<YELLOW<<impValue<<RESET<<endl; 
                     //Above shows player's ACS
 
-                    cout<<MAGENTA<<"\n\t Player's Placement Rank : "<<YELLOW<< Rank(scores)<<RESET<<endl;
+                    cout<<MAGENTA<<"\n\t Player's Placement Rank : "<<YELLOW<< Rank(impValue)<<RESET<<endl;
                     //Above shows player's Rank
 
-                    cout<<MAGENTA<<"\n\t Player's Placement Tier : "<< Tier(scores)<<RESET<<endl;
+                    cout<<MAGENTA<<"\n\t Player's Placement Tier : "<< Tier(impValue)<<RESET<<endl;
                     //Above shows player's Tier
 
                 }  //SRT stands for overall Score, Rank and Tier
@@ -239,13 +231,13 @@
             cout<<GREEN<<"\n\t Upon interpreting your combat score, the best possible agent role is suggested for you. \n\n"<<RESET;
             cout<<BG_RED<<"\n\t NOTE: The guide is purely based on ACS value and does not take into account player's personal preferences or playstyle. \n\t Players are encouraged to experiment with different agents to find the best fit for their individual playstyle.\n"<<RESET<<endl;
 
-            if(scores>=300 && match_data[0]>=20 && match_data[5]>=5){
+            if(impValue>=300 && match_data[0]>=20 && match_data[5]>=5){
 
                 cout<<YELLOW<<"\t\t >>> After taking a look on to your Dominating stats and computated combat score we suggest yo to go for";cout<<BG_RED<<" Duelists "<<RESET<<" role  ";
                 cout<<YELLOW<<" Taking  a more deep look into your overall performance you should try to play"<<BG_RED<<"Jett, Yoru, Waylay, Neon , Reyna or Chamber too[Sentinel but your playstyle allows Chamber to be the duelist of the team as well]"<<RESET<<endl;
                 cout<<"You can get more First bloods and kills with these duelists as they will allow you to get easy picks and escape safely with their mobility and evasive abilites easily,"<<endl;
             }
-            else if(scores>=300 && match_data[0]>16 && match_data[2]>=5 && match_data[5]>3){
+            else if(impValue>=300 && match_data[0]>16 && match_data[2]>=5 && match_data[5]>3){
 
 
                 cout<<YELLOW<<"\t\t >>> After taking a look on to your fabulous stats and computated combat score we suggest yo to go for";cout<<BG_RED<<" Duelists "<<RESET<<" role  ";
@@ -254,7 +246,7 @@
 
             }
 
-            else if(scores>=270  && match_data[0]>=15 && match_data[1]>=10 && match_data[2]>5 && match_data[5]>=3){
+            else if(impValue>=270  && match_data[0]>=15 && match_data[1]>=10 && match_data[2]>5 && match_data[5]>=3){
 
                 cout<<YELLOW<<"\t\t >>> After taking a look on to your fabulous stats and computated combat score we suggest yo to go for";cout<<BG_RED<<"Initiators "<<RESET<<" role.  ";
                 cout<<YELLOW<<" Taking  a more deep look into your overall performance you should try to play"<<BG_RED<<"Breach, Sova,Gekko, KAY/O,Skye,Fade, Tejo or even Waylay (If you can TP back before getting killed)."<<RESET<<endl;
@@ -262,7 +254,7 @@
 
             }
 
-            else if(scores>=250  && match_data[0]>10 && match_data[1]>10 && match_data[2]>=5 && match_data[5]>=4){
+            else if(impValue>=250  && match_data[0]>10 && match_data[1]>10 && match_data[2]>=5 && match_data[5]>=4){
 
                 cout<<YELLOW<<"\t\t >>> After taking a look on to your fabulous stats and computated combat score we suggest yo to go for";cout<<BG_BLUE<<"Contollers "<<RESET<<" role.  ";
                 cout<<YELLOW<<" Taking  a more deep look into your overall performance you should try to play"<<BG_RED<<"Omen, harbour, Astra, Brimstone, Clove or Viper."<<RESET<<endl;
@@ -272,7 +264,7 @@
 
             }
 
-            else if(scores>=190  && match_data[0]>=10 && match_data[1]>15 && match_data[2]>=7 && match_data[5]<4){
+            else if(impValue>=190  && match_data[0]>=10 && match_data[1]>15 && match_data[2]>=7 && match_data[5]<4){
 
                 cout<<YELLOW<<"\t\t >>> After taking a look on to your fabulous stats and computated combat score we suggest yo to go for";cout<<BG_BLUE<<"Sentinels"<<RESET<<" role.  ";
                 cout<<YELLOW<<" Taking  a more deep look into your overall performance you should try to play"<<BG_RED<<"Deadlock, Sage, Vyse, Veto, Chamber,Cypher, KillJoy."<<RESET<<endl;
