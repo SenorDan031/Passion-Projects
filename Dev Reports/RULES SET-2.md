@@ -2,7 +2,7 @@
 
 All contributors must follow this standardized format when writing dev reports.
 
-These rules ensure clarity, consistency, and traceability across the VALONOMICS project.
+These rules ensure clarity, consistency, and traceability across **Passion Projects**.
 
 ---
 
