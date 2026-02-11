@@ -1,3 +1,18 @@
+# Devlog 02
+
+Date: February 11, 2026  
+Author: [Yazdan](https://github.com/SenorDan031)  
+---
+
+## Work done 
+
+   - Renamed repository from **Valonomics** to **Passion-Projects**.
+   - Re-structred the file architecture of current repository.
+
+---
+
+
+
 # Devlog 01
 
 Date: February 9, 2026  
