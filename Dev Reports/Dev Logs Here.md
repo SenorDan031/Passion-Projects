@@ -9,7 +9,8 @@ Author: [Yazdan](https://github.com/SenorDan031)
    - Renamed repository from **Valonomics** to **Passion-Projects**.
    - Re-structred the file architecture of current repository.
    - **Valonomics** is now one of our projects rather than being an entire repository.
-   - Created  a folder named **Valonomics** where all the files related to this project is now shifted. 
+   - Created  a folder named **Valonomics** where all the files related to this project is now shifted.
+   - Updated **About** and **TAGS** for the repository.
 
 ---
 
